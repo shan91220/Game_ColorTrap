@@ -22,6 +22,10 @@ public class GameColorTrap extends PApplet {
 	private int score = 0;
 	private int addOneTime = 1;
 	private int calculate = 0, time = 0;
+	private int limitedTime = 30;  // Game limited time
+	private int pusheenWidth = 100, pusheenHeight = 60;
+	private int pusheenX = width-pusheenWidth, pusheenY = height - pusheenHeight;
+	private int pusheenMove = 1;
 	private HashMap<String, PImage> images = new HashMap<String, PImage>();
 	private String[] file = {
 			"background/colorbackground.png",
@@ -112,6 +116,10 @@ public class GameColorTrap extends PApplet {
 			image(loadImage(colorImage[colorNum0]),colorblock_X0,180,120,120);
 			image(loadImage(colorImage[colorNum1]),colorblock_X1,180,120,120);
 			image(loadImage(colorImage[colorNum2]),colorblock_X2,180,120,120);
+			if(pusheenMove == 1)
+				image(loadImage("component/pusheentime.png"),pusheenX-5,pusheenY+5,pusheenWidth,pusheenHeight);
+			else 
+				image(loadImage("component/pusheentime.png"),pusheenX+5,pusheenY-5,pusheenWidth,pusheenHeight);
 			
 			
 		}
@@ -126,12 +134,16 @@ public class GameColorTrap extends PApplet {
 		if(calculate == 15){
 			calculate = 0;
 			time ++;
+			pusheenMove *= -1;
+			pusheenX = pusheenX - width/limitedTime;
 		}
-		if(time == 20){  // Endgame
+		if(time == limitedTime){  // Endgame
 			this.initial = 0;
 			this.howPlay = 0;
 			this.game = 0;
 			this.howPlay = 0;
+			cp7.remove("Score: "+this.score);
+			draw();
 		}
 	}
 	public void generateColor(){
@@ -212,6 +224,7 @@ public class GameColorTrap extends PApplet {
 			if(wrongBlock == 0){
 				if(mouseX >= colorblock_X0 && mouseX <= colorblock_X0+120 && mouseY >= 180 && mouseY < 300){
 					correct = 1;
+					game = 1;
 					removeColorLabel();
 					cp7.remove("Score: "+this.score);
 					addScore();
@@ -221,6 +234,7 @@ public class GameColorTrap extends PApplet {
 			else if(wrongBlock == 1){
 				if(mouseX >= colorblock_X1 && mouseX <= colorblock_X1+120 && mouseY >= 180 && mouseY < 300){
 					correct = 1;
+					game = 1;
 					removeColorLabel();
 					cp7.remove("Score: "+this.score);
 					addScore();
@@ -230,6 +244,7 @@ public class GameColorTrap extends PApplet {
 			else{
 				if(mouseX >= colorblock_X2 && mouseX <= colorblock_X2+120 && mouseY >= 180 && mouseY < 300){
 					correct = 1;
+					game = 1;
 					removeColorLabel();
 					cp7.remove("Score: "+this.score);
 					addScore();
